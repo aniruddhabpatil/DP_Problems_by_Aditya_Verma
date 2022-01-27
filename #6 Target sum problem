@@ -1,0 +1,106 @@
+// Target Sum
+// https://practice.geeksforgeeks.org/problems/target-sum-1626326450/0/?fbclid=IwAR23ImBXxUeHmTcjMzmUdgir1YbdwDLQKw18XKe1rcRWpj2d5YxCaZduPwA#
+// *** https://leetcode.com/problems/target-sum/
+
+class Solution {
+  public:
+    int countSubsetSum(vector<int>&arr ,int sum)
+    {
+        int i,j,n=arr.size();
+        int dp[n+1][sum+1];
+        for(i=0;i<=n;i++)
+        {
+            for(j=0;j<=sum;j++)
+            {
+                if(i==0)
+                    dp[i][j]=0;
+                if(j==0)
+                    dp[i][j]=1;
+            }    
+        }
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=sum;j++)
+            {
+                if(arr[i-1]<=j)
+                    dp[i][j]=dp[i-1][j-arr[i-1]] + dp[i-1][j];
+                else
+                    dp[i][j]=dp[i-1][j];
+            }    
+        }
+        return dp[n][sum];
+    }
+    int findTargetSumWays(vector<int>&arr ,int target) {
+        //Your code here
+        int i,j,sum=0,n=arr.size();
+        for(i=0;i<n;i++)
+            sum+=arr[i];
+            
+        if( (sum+target)%2==1 )
+            return 0;
+            
+        return countSubsetSum(arr,(sum+target)/2);
+        
+    }
+};
+
+/*
+
+leetcode have much more corner cases like array including 0 and arr having element 100 and target=-100 then ans should be 1
+
+int countSubsetSum(vector<int>&arr ,int sum)
+    {
+        int i,j,n=arr.size();
+        int dp[n+1][sum+1];
+        for(i=0;i<=n;i++)
+        {
+            for(j=0;j<=sum;j++)
+            {
+                if(i==0)
+                    dp[i][j]=0;
+                if(j==0)
+                    dp[i][j]=1;
+            }    
+        }
+        for(i=1;i<=n;i++)
+        {
+            for(j=1;j<=sum;j++)
+            {
+                if(arr[i-1]<=j)
+                    dp[i][j]=dp[i-1][j-arr[i-1]] + dp[i-1][j];
+                else
+                    dp[i][j]=dp[i-1][j];
+            }    
+        }
+        return dp[n][sum];
+    }
+    
+    int findTargetSumWays(vector<int>& nums, int target) 
+    {
+        //Your code here
+        if(target<0)
+            target*=(-1);
+        int i,j,sum=0,n=nums.size(),cnt=0;
+        vector<int> arr;
+        for(i=0;i<n;i++)
+        {
+            sum+=nums[i];
+            if(nums[i]!=0)
+            {
+                arr.push_back(nums[i]);
+            }
+            else
+                cnt++;
+        }
+            
+        if( (sum+target)%2==1 )
+            return 0;
+        
+        int ans=int(pow(2,cnt));
+        ans*=countSubsetSum(arr,(sum+target)/2);
+        return ans;
+        
+    }
+        
+
+*/
